@@ -27,7 +27,7 @@ app.use(
   }),
 );
 
-app.listen(port);
+// app.listen(port);
 
 // Routes
 
@@ -379,3 +379,5 @@ app.get("/api/certificates", async (req, res) => {
     }
   }
 });
+
+export default app;
