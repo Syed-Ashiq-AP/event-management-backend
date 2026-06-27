@@ -1,0 +1,214 @@
+# Event Management System - Backend
+
+## Overview
+
+The backend of the Event Management System provides REST APIs for authentication, event management, registrations, attendance tracking, certificate generation, and analytics.
+
+It is built using **Express.js**, **TypeScript**, **Prisma ORM**, and **Neon PostgreSQL**. Authentication is implemented using **Better Auth**, providing secure session-based authentication.
+
+---
+
+# Tech Stack
+
+- Express.js
+- TypeScript
+- Better Auth
+- Prisma ORM
+- Neon PostgreSQL
+- Jest
+- REST API
+
+---
+
+# Project Structure
+
+```
+backend
+├── jest.config.js
+├── package-lock.json
+├── package.json
+├── prisma
+│   └── schema.prisma
+├── prisma.config.ts
+├── README.md
+├── src
+│   ├── controller
+│   │   └── auth.ts
+│   ├── generated
+│   │   └── prisma
+│   ├── lib
+│   │   ├── auth.ts
+│   │   ├── prisma.ts
+│   │   └── types.ts
+│   ├── middleware
+│   │   └── auth.ts
+│   └── server.ts
+└── tsconfig.json
+```
+
+---
+
+# Architecture
+
+![image](files://C:/Users/jzhang/Desktop/Isolated.png)
+
+---
+
+# Request Flow
+
+![image](files://C:\Users\syed_tl\Desktop\Events\images\backend-request-flow.png)
+
+---
+
+# Authentication Flow
+
+![image](files://C:/C:\Users\syed_tl\Desktop\Events\images\backend-auth-flow.png)
+
+---
+
+# Database
+
+Database Provider:
+Neon PostgreSQL
+
+ORM:
+Prisma
+
+The application stores:
+
+- Users
+- Session
+- Account
+- Verification
+- Events
+- Registrations
+- Certificates
+
+---
+
+# Environment Variables
+
+```
+DATABASE_URL
+
+BETTER_AUTH_SECRET
+
+BETTER_AUTH_URL
+
+GOOGLE_CLIENT_ID
+
+GOOGLE_CLIENT_SECRET
+
+GITHUB_CLIENT_ID
+
+GITHUB_CLIENT_SECRET
+
+FRONTEND_BASE_URL
+
+PORT=8000
+```
+
+---
+
+# Installation
+
+```bash
+npm install
+```
+
+---
+
+# Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+---
+
+# Apply Database Schema
+
+```bash
+npx prisma db push
+```
+
+---
+
+# Run Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+# Run Tests
+
+```bash
+npm test
+```
+
+---
+
+# API Modules
+
+Authentication
+
+- Login
+- Logout
+- Session Validation
+- Set-up User Role
+
+Events
+
+- Create Event
+- View Events
+- Update Event
+- Delete Event
+
+Registration
+
+- Register for Event
+- View Registrations
+- Mark Attendance
+
+Analytics
+
+- Event Statistics
+- Registration Statistics
+
+---
+
+# Error Handling
+
+The backend implements centralized error handling for:
+
+- Validation Errors
+- Unauthorized Requests
+- Internal Server Errors
+
+---
+
+# Security
+
+- Session-based authentication
+- Protected routes
+- Environment variable configuration
+- Prisma SQL injection protection
+- Request validation
+
+---
+
+# Future Improvements
+
+- Email Notifications
+- Role-Based Access Control
+- Event Search
+- Pagination
+- Docker Deployment
+
+---
+
+# Author
+
+Syed Ashiq
