@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma";
+import { prisma } from "./prisma.js";
 
 const FRONTEND_BASE_URL =
   process.env.FRONTEND_BASE_URL ?? "http://localhost:5173";

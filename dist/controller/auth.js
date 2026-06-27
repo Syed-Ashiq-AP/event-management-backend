@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 async function setUpAccount(req, res) {
     const { id, role } = req.body;
     if (!id || !role)
@@ -9,4 +9,3 @@ async function setUpAccount(req, res) {
     return res.status(500).json({ success: false, error: "SOMETHING_WRONG" });
 }
 export { setUpAccount };
-//# sourceMappingURL=auth.js.map

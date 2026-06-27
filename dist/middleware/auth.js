@@ -1,4 +1,4 @@
-import { auth } from "../lib/auth";
+import { auth } from "../lib/auth.js";
 import { fromNodeHeaders } from "better-auth/node";
 export async function requireAuth(req, res, next) {
     const session = await auth.api.getSession({
@@ -12,4 +12,3 @@ export async function requireAuth(req, res, next) {
     req.session = session;
     next();
 }
-//# sourceMappingURL=auth.js.map

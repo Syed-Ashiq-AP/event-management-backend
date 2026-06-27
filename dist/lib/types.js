@@ -1,4 +1,4 @@
-import { z, ZodObject } from "zod";
+import { z } from "zod";
 export const isValid = (check, zObj) => {
     const verify = zObj.safeParse(check);
     return verify.success;
@@ -10,4 +10,3 @@ export const EventSchema = z.object({
     location: z.string(),
     eventDate: z.string().pipe(z.iso.datetime()),
 });
-//# sourceMappingURL=types.js.map

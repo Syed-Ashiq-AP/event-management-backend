@@ -4,18 +4,18 @@ dotenv.config();
 
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import express from "express";
-import { auth } from "./lib/auth";
+import { auth } from "./lib/auth.js";
 import cors from "cors";
-import { prisma } from "./lib/prisma";
+import { prisma } from "./lib/prisma.js";
 import { randomUUID } from "crypto";
-import { EventSchema, isValid } from "./lib/types";
-import { requireAuth } from "./middleware/auth";
-import { setUpAccount } from "./controller/auth";
+import { EventSchema, isValid } from "./lib/types.js";
+import { requireAuth } from "./middleware/auth.js";
+import { setUpAccount } from "./controller/auth.js";
 
 const app = express();
 const port = process.env.PORT ?? 8000;
 const FRONTEND_BASE_URL =
-  process.env.FRONTEND_BASE_URL ?? "http://localhost:5173";
+  process.env.FRONTEND_BASE_URL ?? "http://localhost:5173.js";
 
 // Cofigs
 app.use(express.json());
@@ -213,7 +213,7 @@ app.get("/api/analytics", async (req, res) => {
   try {
     const eventIds = (
       await prisma.event.findMany({ select: { id: true }, where: { userId } })
-    ).map((obj) => obj.id);
+    ).map((obj: { id: string }) => obj.id);
     const registrationsCount = await prisma.registration.count({
       where: { userId, eventId: { in: eventIds } },
     });
