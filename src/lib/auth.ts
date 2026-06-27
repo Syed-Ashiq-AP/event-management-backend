@@ -36,4 +36,13 @@ export const auth = betterAuth({
   onAPIError: {
     errorURL: `${FRONTEND_BASE_URL}/sign-in`,
   },
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+    },
+  },
 });
