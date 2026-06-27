@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
-    "postinstall": "prisma generate",
     "build": "tsc",
-    "test": "jest"
+    "start": "node dist/server.js",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -27,8 +26,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.22.0",
-    "prisma": "^7.8.0",
-    "serverless-http": "^4.0.0"
+    "prisma": "^7.8.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
