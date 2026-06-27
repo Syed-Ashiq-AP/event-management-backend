@@ -14,7 +14,7 @@ import { setUpAccount } from "./controller/auth.js";
 
 const app = express();
 const port = process.env.PORT ?? 8000;
-const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL;
+const FRONTEND_BASE_URL = (process.env.FRONTEND_BASE_URL as string).split(",");
 
 // Cofigs
 app.use(express.json());
