@@ -34,12 +34,11 @@ app.listen(port);
 // Auth Routes
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-app.use(requireAuth);
-
 // Healthy?
 app.get("/api/health", (_, res) => {
   res.send("Healthy!");
 });
+app.use(requireAuth);
 
 // User Routes
 
