@@ -50,19 +50,19 @@ backend
 
 # Architecture
 
-![image](files://C:/Users/jzhang/Desktop/Isolated.png)
+![image](https://github.com/Syed-Ashiq-AP/event-management-backend/blob/master/images/backend-architecture.png)
 
 ---
 
 # Request Flow
 
-![image](files://C:\Users\syed_tl\Desktop\Events\images\backend-request-flow.png)
+![image](https://github.com/Syed-Ashiq-AP/event-management-backend/blob/master/images/backend-request-flow.png)
 
 ---
 
 # Authentication Flow
 
-![image](files://C:/C:\Users\syed_tl\Desktop\Events\images\backend-auth-flow.png)
+![image](https://github.com/Syed-Ashiq-AP/event-management-backend/blob/master/images/backend-auth-flow.png)
 
 ---
 
