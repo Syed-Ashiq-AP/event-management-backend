@@ -1,9 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
-const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL ?? "http://localhost:5173";
+const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL;
+const isProduction = process.env.NODE_ENV === "production";
 export const auth = betterAuth({
-    trustedOrigins: ["http://localhost:5173"],
+    trustedOrigins: [FRONTEND_BASE_URL],
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
@@ -33,5 +34,14 @@ export const auth = betterAuth({
     },
     onAPIError: {
         errorURL: `${FRONTEND_BASE_URL}/sign-in`,
+    },
+    advanced: {
+        crossSubDomainCookies: {
+            enabled: false,
+        },
+        defaultCookieAttributes: {
+            sameSite: isProduction ? "none" : "lax",
+            secure: isProduction,
+        },
     },
 });

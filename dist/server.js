@@ -11,7 +11,7 @@ import { requireAuth } from "./middleware/auth.js";
 import { setUpAccount } from "./controller/auth.js";
 const app = express();
 const port = process.env.PORT ?? 8000;
-const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL ?? "http://localhost:5173.js";
+const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL.split(",");
 // Cofigs
 app.use(express.json());
 app.use(cors({
@@ -348,3 +348,4 @@ app.get("/api/certificates", async (req, res) => {
         }
     }
 });
+export default app;

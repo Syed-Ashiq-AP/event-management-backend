@@ -3,7 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
 
 const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL as string;
-
+const isProduction = process.env.NODE_ENV === "production";
 export const auth = betterAuth({
   trustedOrigins: [FRONTEND_BASE_URL],
   database: prismaAdapter(prisma, {
@@ -41,8 +41,8 @@ export const auth = betterAuth({
       enabled: false,
     },
     defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     },
   },
 });

@@ -377,3 +377,5 @@ app.get("/api/certificates", async (req, res) => {
     }
   }
 });
+
+export default app;
