@@ -15,7 +15,8 @@ It is built using **Express.js**, **TypeScript**, **Prisma ORM**, and **Neon Pos
 - Better Auth
 - Prisma ORM
 - Neon PostgreSQL
-- Jest
+- Vitest
+- Supertest
 - REST API
 
 ---
@@ -24,7 +25,6 @@ It is built using **Express.js**, **TypeScript**, **Prisma ORM**, and **Neon Pos
 
 ```
 backend
-├── jest.config.js
 ├── package-lock.json
 ├── package.json
 ├── prisma
@@ -42,8 +42,13 @@ backend
 │   │   └── types.ts
 │   ├── middleware
 │   │   └── auth.ts
+│   ├── __tests__
+│   │   ├── auth.test.ts
+│   │   ├── prisma.test.ts
+│   │   └── server.test.ts
 │   └── server.ts
-└── tsconfig.json
+├── tsconfig.json
+└── vitest.config.ts
 ```
 
 ---
@@ -144,9 +149,38 @@ npm run dev
 
 # Run Tests
 
+The backend uses **Vitest** in the Node environment.
+
+Test configuration:
+
+- `vitest.config.ts` sets `environment: "node"`.
+- Tests live in `src/__tests__`.
+- `supertest` is used for HTTP endpoint tests.
+- Prisma-related tests use transactional testing helpers where needed.
+
+Run tests once:
+
 ```bash
 npm test
 ```
+
+Run tests in watch mode:
+
+```bash
+npm run test:watch
+```
+
+Current test coverage includes:
+
+- Health endpoint
+- Email sign-up and sign-in flows
+- Session and logout flow
+- User role setup
+- Event create, list, update, and delete behavior
+- Participant registration and cancellation behavior
+- Attendance marking
+- Analytics
+- Certificates
 
 ---
 
