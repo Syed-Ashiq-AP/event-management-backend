@@ -213,10 +213,10 @@ app.get("/api/analytics", async (req, res) => {
       await prisma.event.findMany({ select: { id: true }, where: { userId } })
     ).map((obj: { id: string }) => obj.id);
     const registrationsCount = await prisma.registration.count({
-      where: { userId, eventId: { in: eventIds } },
+      where: { eventId: { in: eventIds } },
     });
     const attendanceCount = await prisma.registration.count({
-      where: { userId, attended: true, eventId: { in: eventIds } },
+      where: { attended: true, eventId: { in: eventIds } },
     });
     return res.status(200).json({
       success: true,
