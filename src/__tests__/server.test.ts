@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
 
   createEvent: vi.fn(),
   findEvents: vi.fn(),
+  findEvent: vi.fn(),
   updateEvent: vi.fn(),
   deleteEvent: vi.fn(),
 
@@ -36,6 +37,7 @@ vi.mock("../lib/prisma.js", () => ({
     event: {
       create: mocks.createEvent,
       findMany: mocks.findEvents,
+      findFirst: mocks.findEvent,
       update: mocks.updateEvent,
       delete: mocks.deleteEvent,
       findUnique: vi.fn(),
@@ -88,6 +90,7 @@ beforeEach(() => {
   vi.mocked(prisma.user.update).mockResolvedValue(mockUser);
   vi.mocked(prisma.event.create).mockResolvedValue(mockEvent);
   vi.mocked(prisma.event.findMany).mockResolvedValue([mockEvent]);
+  vi.mocked(prisma.event.findFirst).mockResolvedValue(mockEvent);
 });
 
 describe("PUT /api/set-up", () => {
@@ -155,6 +158,46 @@ describe("GET /api/events", () => {
       const response = await request(app).get("/api/events").send({});
       expect(response.statusCode).toBe(200);
     });
+  });
+});
+
+describe("GET /api/events/:eventId/participants", () => {
+  beforeEach(() => {
+    vi.mocked(prisma.registration.findMany).mockResolvedValue([
+      {
+        id: "registration-1",
+        userId: "participant-1",
+        eventId: mockEvent.id,
+        attended: false,
+        registeredAt: new Date(),
+        user: {
+          id: "participant-1",
+          name: "Participant User",
+          email: "participant@example.com",
+          image: null,
+          role: "PARTICIPANT",
+        },
+      } as any,
+    ]);
+  });
+
+  test("Case: organizer gets participant list", async () => {
+    const response = await request(app).get("/api/events/event-1/participants");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        participants: expect.arrayContaining([
+          expect.objectContaining({
+            id: "registration-1",
+            user: expect.objectContaining({
+              email: "participant@example.com",
+            }),
+          }),
+        ]),
+      }),
+    );
   });
 });
 

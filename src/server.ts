@@ -123,6 +123,67 @@ app.get("/api/events", async (req, res) => {
   }
 });
 
+// Event participants
+app.get("/api/events/:eventId/participants", async (req, res) => {
+  const { eventId } = req.params;
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  if (!session) {
+    return res
+      .status(401)
+      .json({ success: false, error: "Failed to get User Sessions" });
+  }
+
+  const { id: userId, role } = session.user;
+  if (role !== "ORGANIZER") {
+    return res.status(403).json({ success: false, error: "FORBIDDEN" });
+  }
+
+  try {
+    const event = await prisma.event.findFirst({
+      where: {
+        id: eventId,
+        userId,
+      },
+    });
+
+    if (!event) {
+      return res.status(404).json({ success: false, error: "EVENT_NOT_FOUND" });
+    }
+
+    const participants = await prisma.registration.findMany({
+      where: { eventId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            role: true,
+          },
+        },
+      },
+      orderBy: {
+        registeredAt: "desc",
+      },
+    });
+
+    return res.status(200).json({ success: true, participants });
+  } catch (e) {
+    console.error(e);
+
+    if (e instanceof Error) {
+      return res.status(500).json({
+        name: e.name,
+        message: e.message,
+        stack: e.stack,
+      });
+    }
+  }
+});
+
 // Update Event
 
 app.put("/api/events/:id", async (req, res) => {
