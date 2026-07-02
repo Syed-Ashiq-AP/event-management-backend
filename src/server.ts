@@ -15,6 +15,13 @@ import { setUpAccount } from "./controller/auth.js";
 const app = express();
 const port = process.env.PORT ?? 8000;
 const FRONTEND_BASE_URL = (process.env.FRONTEND_BASE_URL as string).split(",");
+const eventWithOrganizer = {
+  user: {
+    select: {
+      name: true,
+    },
+  },
+} as const;
 
 // Cofigs
 app.use(express.json());
@@ -51,10 +58,36 @@ app.post("/api/events", async (req, res) => {
   if (!isValid(eventRequest, EventSchema)) {
     return res.status(500).json({ success: false, error: "INVALID_BODY" });
   }
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  if (!session) {
+    return res
+      .status(401)
+      .json({ success: false, error: "Failed to get User Sessions" });
+  }
+
+  const { id: userId } = session.user;
   try {
+    const duplicateEvent = await prisma.event.findFirst({
+      where: {
+        userId,
+        title: eventRequest.title,
+        location: eventRequest.location,
+        eventDate: new Date(eventRequest.eventDate),
+      },
+    });
+
+    if (duplicateEvent) {
+      return res
+        .status(409)
+        .json({ success: false, error: "EVENT_ALREADY_EXISTS" });
+    }
+
     const event = await prisma.event.create({
       data: {
         id: randomUUID(),
+        userId,
         ...eventRequest,
       },
     });
@@ -95,6 +128,7 @@ app.get("/api/events", async (req, res) => {
       role === "PARTICIPANT"
         ? await prisma.event.findMany({
             include: {
+              ...eventWithOrganizer,
               registrations: {
                 where: {
                   userId: id,
@@ -105,7 +139,10 @@ app.get("/api/events", async (req, res) => {
               },
             },
           })
-        : await prisma.event.findMany({ where: { userId: id } });
+        : await prisma.event.findMany({
+            where: { userId: id },
+            include: eventWithOrganizer,
+          });
     if (!events) {
       return res.status(500).json({ success: false, error: "SOMETHING_WRONG" });
     }
@@ -193,6 +230,24 @@ app.put("/api/events/:id", async (req, res) => {
     return res.status(500).json({ error: "INVALID_BODY" });
   }
   try {
+    const duplicateEvent = await prisma.event.findFirst({
+      where: {
+        userId: eventRequest.userId,
+        title: eventRequest.title,
+        location: eventRequest.location,
+        eventDate: new Date(eventRequest.eventDate),
+        NOT: {
+          id,
+        },
+      },
+    });
+
+    if (duplicateEvent) {
+      return res
+        .status(409)
+        .json({ success: false, error: "EVENT_ALREADY_EXISTS" });
+    }
+
     const event = await prisma.event.update({
       data: eventRequest,
       where: { id },

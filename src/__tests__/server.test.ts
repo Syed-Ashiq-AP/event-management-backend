@@ -129,6 +129,7 @@ describe("POST /api/events", () => {
 
   describe("201 Accepted", () => {
     test("Case: valid user and id", async () => {
+      vi.mocked(prisma.event.findFirst).mockResolvedValueOnce(null as any);
       const { id: _, createdAt: __, ...requestBody } = mockEvent;
       const response = await request(app).post("/api/events").send(requestBody);
       expect(response.statusCode).toBe(201);
@@ -140,6 +141,19 @@ describe("POST /api/events", () => {
           eventDate: mockEvent.eventDate.toISOString(),
         },
       });
+    });
+  });
+
+  test("Case: duplicate event is rejected", async () => {
+    vi.mocked(prisma.event.findFirst).mockResolvedValueOnce(mockEvent as any);
+    const { id: _, createdAt: __, ...requestBody } = mockEvent;
+
+    const response = await request(app).post("/api/events").send(requestBody);
+
+    expect(response.statusCode).toBe(409);
+    expect(response.body).toEqual({
+      success: false,
+      error: "EVENT_ALREADY_EXISTS",
     });
   });
 });
@@ -218,6 +232,7 @@ describe("PUT /api/events/:id", () => {
 
   describe("200 Accepted", () => {
     test("Case: valid event", async () => {
+      vi.mocked(prisma.event.findFirst).mockResolvedValueOnce(null as any);
       const { id: _, createdAt: __, ...body } = mockEvent;
 
       const response = await request(app).put("/api/events/event-1").send(body);
